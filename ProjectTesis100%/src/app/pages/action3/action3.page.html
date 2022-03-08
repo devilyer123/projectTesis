@@ -1,0 +1,59 @@
+<!--<app-header titulo="Registro de Creditos"></app-header>-->
+
+<ion-header>
+  <ion-toolbar>
+    
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Registro de Creditos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title> Lista de Cobranzas </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card *ngFor="let cli of clients">
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <h2> {{ cli.nomPriCli }} {{ cli.apePatCli }} </h2>
+          <h3> Cantidad de Productos </h3>
+          <p> Productos totales a Entregar </p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button expand="block" [routerLink]="['/','action3','cobrar-credito', cli.idcli]" >
+            <ion-icon slot="icon-only" name="wallet-outline" color="success"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+    <!--<ion-list>
+        <ion-list-header>
+          Pedidos Solicitados
+        </ion-list-header>
+
+        <ion-item *ngFor="let cred of listCred">
+          <ion-label>
+            <h2>{{cred.name}}</h2>
+            <h3>Monto a Cobrar: {{cred.montoTotal}} Bs.</h3>
+            <p>Tipo de Pago: {{cred.tipoPago}}</p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+              <ion-button (click)="entrPed()" expand="block">
+                  <ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
+              </ion-button>
+          </ion-buttons>
+
+        </ion-item>
+      </ion-list>-->
+</ion-content>

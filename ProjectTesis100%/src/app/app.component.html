@@ -1,0 +1,27 @@
+<ion-app>
+
+  <ion-menu side="start" menuId="first" contentId="main">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Menu de Actividades</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        
+        <ion-menu-toggle *ngFor="let act of activities | async">
+          <ion-item 
+              [routerLink]="act.redirectTo"
+              detail>
+            <ion-icon [name]="act.icon" slot="start" color="primary"></ion-icon>
+            {{ act.name }}
+          </ion-item>
+        </ion-menu-toggle>        
+
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-app>
