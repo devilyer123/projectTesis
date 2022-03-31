@@ -54,6 +54,7 @@ export interface User {
     apPaterno: string,
     apMaterno: string,
     nrocelular: number,
+    rolUser: string,
     username: string,
     email: string,
     password: string
@@ -66,6 +67,7 @@ export interface upUser {
     apPaterno: string,
     apMaterno: string,
     nrocelular: number,
+    rolUser: string,
     username: string,
     email: string
 }
@@ -75,7 +77,9 @@ export interface Client {
     userId?: number,
     nomPriCli: string,
     apePatCli: string,
-    apeMatCli: string
+    apeMatCli: string,
+    /*createdAt?: Date,
+    updatedAt?: Date*/
 }
 
 export interface Order {
@@ -98,7 +102,14 @@ export interface Distribution {
 export interface Credit {
     idsegcre?: number,
     cliId?: number,
+    nomPro: string,
+    cantVend: number,
     tipoPago: string,
     montoCred: number,
     estadoCred: string
 }
+
+/*export interface ListCredit {
+    nomProduct: string,
+
+}*/

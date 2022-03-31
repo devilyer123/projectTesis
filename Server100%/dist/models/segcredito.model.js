@@ -12,6 +12,12 @@ const SegCredito = sequelize_2.default.define('segCreditos', {
         primaryKey: true,
         allowNull: false
     },
+    nomPro: {
+        type: sequelize_1.default.STRING
+    },
+    cantVend: {
+        type: sequelize_1.default.INTEGER
+    },
     tipoPago: {
         type: sequelize_1.default.STRING
     },
@@ -24,6 +30,7 @@ const SegCredito = sequelize_2.default.define('segCreditos', {
     cliId: {
         type: sequelize_1.default.INTEGER
     }
-});
+} //,{timestamps: false}
+);
 exports.default = SegCredito;
 //# sourceMappingURL=segcredito.model.js.map

@@ -19,7 +19,7 @@ class UserController {
     constructor() {
         this.createUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let password = bcrypt.hashSync(req.body.password, 10);
-            const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, username, email } = req.body;
+            const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, rolUser, username, email } = req.body;
             try {
                 let user = yield usuario_model_1.default.findOne({
                     where: {
@@ -36,6 +36,7 @@ class UserController {
                         apPaterno: apPaterno,
                         apMaterno: apMaterno,
                         nrocelular: nrocelular,
+                        rolUser: rolUser,
                         username: username,
                         email: email,
                         password: password
@@ -94,9 +95,9 @@ class UserController {
         });
         this.updateUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, username, email /*, password*/ } = req.body;
+            const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, rolUser, username, email /*, password*/ } = req.body;
             const users = yield usuario_model_1.default.findAll({
-                attributes: ['iduser', 'priNombre', 'secNombre', 'apPaterno', 'apMaterno', 'nrocelular', 'username', 'email' /*, 'password'*/],
+                attributes: ['iduser', 'priNombre', 'secNombre', 'apPaterno', 'apMaterno', 'nrocelular', 'rolUser', 'username', 'email' /*, 'password'*/],
                 where: {
                     iduser: id
                 }
@@ -109,6 +110,7 @@ class UserController {
                         apPaterno: apPaterno,
                         apMaterno: apMaterno,
                         nrocelular: nrocelular,
+                        rolUser: rolUser,
                         username: username,
                         email: email,
                         //password: bcrypt.hashSync(password, 10)

@@ -32,7 +32,7 @@ class ClientController {
                 const clients = yield cliente_model_1.default.findAll({
                     attributes: ['idcli', 'userId', 'nomPriCli', 'apePatCli', 'apeMatCli'],
                     order: [
-                        ['idcli', 'ASC' /*'DESC'*/]
+                        ['idcli', 'ASC'] /*'DESC'*/
                     ]
                 });
                 res.json({ clients });

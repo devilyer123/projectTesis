@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import database from '../classes/sequelize';
 import Pedido from './pedido.model';
+//import Pedido from './pedido.model';
 //import ListadoProducto from './listadoProducto.model';
 
 const Producto = database.define('productos', {
@@ -23,5 +24,7 @@ const Producto = database.define('productos', {
     timestamps: false
 });
 
+Producto.hasMany(Pedido, { foreignKey: 'proId', sourceKey: 'idpro' } );
+Pedido.belongsTo(Producto, { foreignKey: 'proId' } );
 
 export default Producto;

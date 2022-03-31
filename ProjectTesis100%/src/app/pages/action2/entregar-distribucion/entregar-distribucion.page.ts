@@ -30,6 +30,8 @@ export class EntregarDistribucionPage implements OnInit {
 
   cred: Credit = {
     cliId: 0,
+    nomPro: '',
+    cantVend: 0,
     tipoPago: '',
     montoCred: 0,
     estadoCred: ''
@@ -94,23 +96,27 @@ export class EntregarDistribucionPage implements OnInit {
   regSegCredit() {
     this.creditService.registerCredit({
       cliId: this.cli.idcli,
+      nomPro: this.dist.nomPro,
+      cantVend: this.dist.cantSolic,
       tipoPago: this.upTypPage.typPage,
       montoCred: this.dist.montoTotal,
-      estadoCred: this.dist.estadoPedido
+      estadoCred: 'Pendiente'
     }).subscribe(resp => {
-      if(resp['ok']){
+      console.log(resp)
+      /*if(resp['ok']){
         console.log(resp);
       } else {
         this.traspas(resp);
         console.log(this.cred);
         //this.moreCredit();
         this.upCredit();
-      }
-    }
+      }*/
+    },
+    (err) => console.log(err)
     )
   }
 
-  upCredit() {
+  /*upCredit() {
     this.cred.montoCred = this.sumarMonto(this.cred.montoCred, this.dist.montoTotal);
     this.creditService.updateCredit(this.cred.idsegcre, {
       tipoPago: this.cred.tipoPago,
@@ -119,7 +125,7 @@ export class EntregarDistribucionPage implements OnInit {
     }).subscribe( res => {
       console.log(res);
     })
-  }
+  }*/
 
   sumarMonto(ant, act){
     const total = parseInt(ant) + parseInt(act);
@@ -133,6 +139,7 @@ export class EntregarDistribucionPage implements OnInit {
         {
           text: 'Entregado',
           handler: () => {
+            //this.dist.estadoPedido = "Entregado"
             this.distributionService.getOneDistribution(id).subscribe(
               (res) => {
                 this.dist = res;
@@ -145,6 +152,7 @@ export class EntregarDistribucionPage implements OnInit {
         {
           text: 'Pendiente',
           handler: () => {
+            //this.distribution.estadoPedido = "Pendiente"
             this.distributionService.getOneDistribution(id).subscribe(
               (res) => {
                 this.dist = res;

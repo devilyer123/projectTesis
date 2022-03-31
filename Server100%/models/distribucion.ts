@@ -24,6 +24,7 @@ const Distribucion = database.define('distribuciones', {
         type: Sequelize.INTEGER
     }
 
-})
+}//,{timestamps: false}
+);
 
 export default Distribucion;

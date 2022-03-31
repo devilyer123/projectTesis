@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { upUser, User } from 'src/app/interfaces/interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-update-user',
@@ -17,6 +17,7 @@ export class UpdateUserPage implements OnInit {
     apPaterno: '',
     apMaterno: '',
     nrocelular: 0,
+    rolUser: '',
     username: '',
     email: '',
     //password: ''
@@ -25,7 +26,8 @@ export class UpdateUserPage implements OnInit {
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private usuarioService: UsuarioService,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
@@ -46,12 +48,34 @@ export class UpdateUserPage implements OnInit {
       apPaterno: this.user.apPaterno,
       apMaterno: this.user.apMaterno,
       nrocelular: this.user.nrocelular,
+      rolUser: this.user.rolUser,
       username: this.user.username,
       email: this.user.email,
       //password: this.user.password
     }).subscribe( res => {
       this.navCtrl.navigateRoot('/users', { animated: true });
     });
+  }
+
+  async assignRol(){
+    const alert = await this.alertController.create({
+      header: 'Seleccione el rol de usuario',
+      buttons: [
+        {
+          text: 'Administrador',
+          handler: () => {
+            this.user.rolUser = "Administrador"
+          }
+        },
+        {
+          text: 'Distribuidor/Vendedor',
+          handler: () => {
+            this.user.rolUser = "Distribuidor/Vendedor"
+          }
+        }
+      ]
+    })
+    await alert.present();
   }
 
 }

@@ -8,6 +8,12 @@ const SegCredito = database.define('segCreditos', {
         primaryKey: true,
         allowNull:false
     },
+    nomPro: {
+        type: Sequelize.STRING
+    },
+    cantVend: {
+        type: Sequelize.INTEGER
+    },
     tipoPago: {
         type: Sequelize.STRING
     },
@@ -20,6 +26,7 @@ const SegCredito = database.define('segCreditos', {
     cliId: {
         type: Sequelize.INTEGER
     }
-})
+}//,{timestamps: false}
+);
 
 export default SegCredito;

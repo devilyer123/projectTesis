@@ -23,9 +23,8 @@ const Cliente = database.define('clientes', {
     userId: {
         type: Sequelize.INTEGER
     }
-},{
-    timestamps: false
-});
+}//,{timestamps: false}
+);
 
 Cliente.hasMany(Pedido, { foreignKey: 'cliId', sourceKey: 'idcli' } );
 Pedido.belongsTo(Cliente, { foreignKey: 'cliId' } );

@@ -23,7 +23,11 @@ const Pedido = sequelize_2.default.define('pedidos', {
     },
     cliId: {
         type: sequelize_1.default.INTEGER
+    },
+    proId: {
+        type: sequelize_1.default.INTEGER
     }
-});
+} //,{timestamps: false}
+);
 exports.default = Pedido;
 //# sourceMappingURL=pedido.model.js.map

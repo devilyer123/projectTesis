@@ -13,7 +13,7 @@ export class CreditService {
   constructor(private http: HttpClient) { }
 
   getCreditsByClient(id: number) {
-    return this.http.get<Credit>(`${ URL }/credits/client/${ id }`);
+    return this.http.get<RespuestaCredits>(`${ URL }/credits/client/${ id }`);
   }
 
   getCredits() {

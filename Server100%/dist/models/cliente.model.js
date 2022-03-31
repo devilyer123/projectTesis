@@ -27,9 +27,8 @@ const Cliente = sequelize_2.default.define('clientes', {
     userId: {
         type: sequelize_1.default.INTEGER
     }
-}, {
-    timestamps: false
-});
+} //,{timestamps: false}
+);
 Cliente.hasMany(pedido_model_1.default, { foreignKey: 'cliId', sourceKey: 'idcli' });
 pedido_model_1.default.belongsTo(Cliente, { foreignKey: 'cliId' });
 Cliente.hasMany(distribucion_1.default, { foreignKey: 'cliId', sourceKey: 'idcli' });

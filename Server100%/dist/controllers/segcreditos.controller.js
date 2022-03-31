@@ -16,7 +16,7 @@ const segcredito_model_1 = __importDefault(require("../models/segcredito.model")
 class SegCreditController {
     constructor() {
         this.createCredit = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { tipoPago, montoCred, estadoCred, cliId } = req.body;
+            const { nomPro, cantVend, tipoPago, montoCred, estadoCred, cliId } = req.body;
             try {
                 let credit = yield segcredito_model_1.default.findOne({
                     where: {
@@ -29,12 +29,14 @@ class SegCreditController {
                 }
                 else {
                     let newCredit = yield segcredito_model_1.default.create({
+                        nomPro: nomPro,
+                        cantVend: cantVend,
                         tipoPago: tipoPago,
                         montoCred: montoCred,
                         estadoCred: estadoCred,
                         cliId: cliId
                     }, {
-                        fields: ['tipoPago', 'montoCred', 'estadoCred', 'cliId']
+                        fields: ['nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred', 'cliId']
                     });
                     return res.json({
                         ok: true,
@@ -54,7 +56,7 @@ class SegCreditController {
         this.getCredits = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const credits = yield segcredito_model_1.default.findAll({
-                    attributes: ['idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred'],
+                    attributes: ['idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred'],
                     order: [
                         ['idsegcre', 'ASC' /*'DESC'*/]
                     ]
@@ -69,7 +71,7 @@ class SegCreditController {
             const { id } = req.params;
             const credit = yield segcredito_model_1.default.findOne({
                 where: { idsegcre: id },
-                attributes: ['idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred']
+                attributes: ['idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred']
             });
             res.json(credit);
         });
@@ -86,7 +88,7 @@ class SegCreditController {
             const { id } = req.params;
             const { cliId, tipoPago, montoCred, estadoCred } = req.body;
             const credit = yield segcredito_model_1.default.findOne({
-                attributes: ['cliId', 'tipoPago', 'montoCred', 'estadoCred', 'idsegcre'],
+                attributes: ['cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred', 'idsegcre'],
                 where: { idsegcre: id }
             });
             const updatedCredit = yield segcredito_model_1.default.update({
@@ -104,11 +106,13 @@ class SegCreditController {
         });
         this.getCreditByClient = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { cliId } = req.params;
-            const credits = yield segcredito_model_1.default.findOne({
-                //attributes: [ 'idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred' ],
+            const credits = yield segcredito_model_1.default.findAll({
+                attributes: ['idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred'],
                 where: { cliId }
             });
-            res.json(credits);
+            res.json({
+                dataCredits: credits
+            });
         });
     }
 }

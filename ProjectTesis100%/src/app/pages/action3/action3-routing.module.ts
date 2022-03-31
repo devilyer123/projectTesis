@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'cobrar-credito/:idcli',
     loadChildren: () => import('./cobrar-credito/cobrar-credito.module').then( m => m.CobrarCreditoPageModule)
+  },
+  {
+    path: 'credits-client/:idcli',
+    loadChildren: () => import('./credits-client/credits-client.module').then( m => m.CreditsClientPageModule)
   }
 ];
 

@@ -26,7 +26,7 @@
     },
     {
         "icon": "exit-outline",
-        "name": "CERRAR SES1IÓN ",
+        "name": "CERRAR SESIÓN ",
         "redirectTo": "/inicio"
     }
 ]

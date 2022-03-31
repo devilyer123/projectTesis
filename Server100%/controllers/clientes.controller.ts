@@ -20,7 +20,7 @@ export default class ClientController {
             const clients = await Cliente.findAll({
                 attributes: [ 'idcli', 'userId', 'nomPriCli', 'apePatCli', 'apeMatCli' ],
                 order: [
-                    ['idcli', 'ASC' /*'DESC'*/]
+                    ['idcli', 'ASC'] /*'DESC'*/
                 ]
             });
             res.json({clients});

@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/action3"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lista de Creditos del Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngFor="let cred of credit">
+    <ion-card-header>
+      <ion-card-title> {{cred.nomPro}} </ion-card-title>
+      <ion-card-subtitle> Cantidad Vendida: {{cred.cantVend}} </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Tipo de Pago: {{cred.tipoPago}} </ion-card-content>
+    <!--<ion-card-content> Monto de Deuda Pendiente: {{cred.montoCred}} </ion-card-content>-->
+  </ion-card>
+
+</ion-content>

@@ -29,6 +29,9 @@ const Usuario = sequelize_2.default.define('usuarios', {
         type: sequelize_1.default.INTEGER
         //unique: true
     },
+    rolUser: {
+        type: sequelize_1.default.STRING
+    },
     username: {
         type: sequelize_1.default.STRING
         //unique: true
@@ -40,9 +43,9 @@ const Usuario = sequelize_2.default.define('usuarios', {
     password: {
         type: sequelize_1.default.STRING
     }
-}, {
+} /*, {
     timestamps: false,
-});
+}*/);
 // Un Usuario tiene muchos Clientes
 Usuario.hasMany(cliente_model_1.default, { foreignKey: 'userId', sourceKey: 'iduser' });
 // Un Cliente tiene solamente un Usuario

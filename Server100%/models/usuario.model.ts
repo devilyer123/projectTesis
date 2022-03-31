@@ -26,6 +26,9 @@ const Usuario = database.define('usuarios', {
         type: Sequelize.INTEGER
         //unique: true
     },
+    rolUser: {
+        type: Sequelize.STRING
+    },
     username: {
         type: Sequelize.STRING
         //unique: true
@@ -37,9 +40,9 @@ const Usuario = database.define('usuarios', {
     password:{
         type: Sequelize.STRING
     }
-}, {
+}/*, {
     timestamps: false,
-});
+}*/);
 
 // Un Usuario tiene muchos Clientes
 Usuario.hasMany(Cliente, { foreignKey: 'userId', sourceKey: 'iduser' } );

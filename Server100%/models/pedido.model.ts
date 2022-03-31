@@ -19,7 +19,11 @@ const Pedido = database.define('pedidos', {
     },
     cliId: {
         type: Sequelize.INTEGER
+    },
+    proId: {
+        type: Sequelize.INTEGER
     }
-})
+}//,{timestamps: false}
+);
 
 export default Pedido;

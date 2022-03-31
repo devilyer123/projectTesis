@@ -33,14 +33,15 @@
       </ion-item-divider>
 
       <ion-item>
-        <ion-label>Cantidad Pedida</ion-label>
-        <ion-input placeholder="0" [(ngModel)]="regisOrder.cantSolic" ></ion-input>
+        <ion-label>Cantidad Pedida: </ion-label>
+        <ion-input placeholder="0" [(ngModel)]="regisOrder.cantSolic" required></ion-input>
       </ion-item>
 
       <ion-item *ngFor="let inf of infProd">
         <ion-label>
           <h2> {{inf.nomProd}} </h2>
           <h3> Precio por Unidad: {{inf.precio}} </h3>
+          <h3> Cantidad disponible: {{inf.cantDisp}} </h3>
         </ion-label>
 
         <ion-buttons slot="end">
@@ -77,7 +78,7 @@
       </ion-item>-->
 
       <ion-button (click)="regOrder()" expand="block" fill="clear" shape="round">
-        Agregar a la lista
+        Agregar a la lista de Pedidos
       </ion-button>
 
       <!--<ion-item-divider>
@@ -96,6 +97,6 @@
   </ion-list>
 
   <ion-button (click)="upClient()" expand="block">
-    Guardar Pedido
+    Actualizar Información Cliente
   </ion-button>
 </ion-content>

@@ -27,6 +27,7 @@ const Distribucion = sequelize_2.default.define('distribuciones', {
     cliId: {
         type: sequelize_1.default.INTEGER
     }
-});
+} //,{timestamps: false}
+);
 exports.default = Distribucion;
 //# sourceMappingURL=distribucion.js.map

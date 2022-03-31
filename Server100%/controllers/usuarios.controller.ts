@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 export default class UserController {
     createUser = async (req: Request, res: Response) => {
         let password = bcrypt.hashSync(req.body.password, 10);
-        const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, username, email } = req.body;
+        const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, rolUser, username, email } = req.body;
         try {
             let user = await Usuario.findOne({
                 where: {
@@ -22,6 +22,7 @@ export default class UserController {
                     apPaterno: apPaterno,
                     apMaterno: apMaterno,
                     nrocelular: nrocelular,
+                    rolUser: rolUser,
                     username: username,
                     email: email,
                     password: password
@@ -84,10 +85,10 @@ export default class UserController {
 
     updateUser = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, username, email/*, password*/ } = req.body;
+        const { priNombre, secNombre, apPaterno, apMaterno, nrocelular, rolUser, username, email/*, password*/ } = req.body;
 
         const users = await Usuario.findAll({
-            attributes: [ 'iduser', 'priNombre', 'secNombre', 'apPaterno', 'apMaterno', 'nrocelular', 'username', 'email'/*, 'password'*/ ],
+            attributes: [ 'iduser', 'priNombre', 'secNombre', 'apPaterno', 'apMaterno', 'nrocelular', 'rolUser', 'username', 'email'/*, 'password'*/ ],
             where: {
                 iduser: id
             }
@@ -101,6 +102,7 @@ export default class UserController {
                     apPaterno: apPaterno,
                     apMaterno: apMaterno,
                     nrocelular: nrocelular,
+                    rolUser:rolUser,
                     username: username,
                     email: email,
                     //password: bcrypt.hashSync(password, 10)

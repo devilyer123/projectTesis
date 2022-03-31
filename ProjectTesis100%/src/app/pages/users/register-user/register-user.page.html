@@ -40,6 +40,16 @@
         <ion-item-divider>
           <ion-label>Datos de la Cuenta</ion-label>
         </ion-item-divider>
+
+        <ion-item>
+          <ion-label position="floating">Rol de Usuario</ion-label>
+          <ion-input name="rolUser" type="text" [(ngModel)]="registerUser.rolUser" required></ion-input>
+          <ion-buttons slot="end">
+            <ion-button expand="block" (click)="assignRol()">
+              <ion-icon slot="icon-only" name="nuclear-outline" color="tertiary" ></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
   
         <ion-item>
           <ion-label position="floating">Nombre de Usuario</ion-label>

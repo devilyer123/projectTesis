@@ -8,7 +8,26 @@
 </ion-header>
 
 <ion-content>
-  <form>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title> Lista de Cobranzas </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card *ngFor="let cred of credit">
+    <ion-card-header>
+      <ion-card-title> {{cred.nomPro}} </ion-card-title>
+      <ion-card-subtitle> Cantidad Vendida: {{cred.cantVend}} </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Tipo de Pago: {{cred.tipoPago}} </ion-card-content>
+    <ion-card-content> Monto de Deuda Pendiente: {{cred.montoCred}} </ion-card-content>
+    <ion-item>
+      
+    </ion-item>
+  </ion-card>
+
+  <!--<form>
     <ion-list>
 
       <ion-item-divider>
@@ -36,5 +55,5 @@
 
     <ion-button color="tertiary" shape="round" (click)="upCredit()">Realizar Cobro de Deuda</ion-button>
 
-  </form>
+  </form>-->
 </ion-content>

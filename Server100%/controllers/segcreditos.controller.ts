@@ -3,7 +3,7 @@ import SegCredito from "../models/segcredito.model";
 
 export default class SegCreditController {
     createCredit = async (req: Request, res: Response) => {
-        const { tipoPago, montoCred, estadoCred, cliId } = req.body;
+        const { nomPro, cantVend, tipoPago, montoCred, estadoCred, cliId } = req.body;
         try {
             let credit = await SegCredito.findOne({
                 where: {
@@ -15,12 +15,14 @@ export default class SegCreditController {
                 //res.json({ok: false, message: "Este usario ya tiene deudas", credit});
             } else {
                 let newCredit = await SegCredito.create({
+                    nomPro: nomPro,
+                    cantVend: cantVend,
                     tipoPago: tipoPago,
                     montoCred: montoCred,
                     estadoCred: estadoCred,
                     cliId: cliId
                 }, {
-                    fields: [ 'tipoPago', 'montoCred', 'estadoCred', 'cliId' ]
+                    fields: [ 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred', 'cliId' ]
                 });
                 return res.json({
                     ok: true,
@@ -41,7 +43,7 @@ export default class SegCreditController {
     getCredits = async (req: Request, res: Response) => {
         try {
             const credits = await SegCredito.findAll({
-                attributes: [ 'idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred' ],
+                attributes: [ 'idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred' ],
                 order: [
                     ['idsegcre', 'ASC' /*'DESC'*/]
                 ]
@@ -56,7 +58,7 @@ export default class SegCreditController {
         const { id } = req.params;        
         const credit = await SegCredito.findOne({
             where: { idsegcre: id },
-            attributes: [ 'idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred' ]
+            attributes: [ 'idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred' ]
         });
         res.json(credit);
     }
@@ -76,7 +78,7 @@ export default class SegCreditController {
         const { cliId, tipoPago, montoCred, estadoCred } = req.body;
 
         const credit =  await SegCredito.findOne({
-            attributes: [ 'cliId', 'tipoPago', 'montoCred', 'estadoCred', 'idsegcre' ],
+            attributes: [ 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred', 'idsegcre' ],
             where: { idsegcre: id }
         });
         
@@ -98,10 +100,12 @@ export default class SegCreditController {
 
     getCreditByClient = async (req: Request, res: Response) => {
         const { cliId } = req.params;
-        const credits = await SegCredito.findOne({
-            //attributes: [ 'idsegcre', 'cliId', 'tipoPago', 'montoCred', 'estadoCred' ],
+        const credits = await SegCredito.findAll({
+            attributes: [ 'idsegcre', 'cliId', 'nomPro', 'cantVend', 'tipoPago', 'montoCred', 'estadoCred' ],
             where: { cliId }
         });
-        res.json(credits);
+        res.json({
+            dataCredits: credits
+        });
     }
 }
