@@ -91,6 +91,8 @@ class UserRoutes {
 
         router.get('/credits/client/:cliId', this.segCreditController.getCreditByClient);
 
+        router.get('/test', this.segCreditController.test);
+
     }
 
     static userController = new UserController();

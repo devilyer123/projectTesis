@@ -121,4 +121,10 @@ export default class SegCreditController {
             dataCredits: credits
         });
     }
+
+    test = async (req: Request, res: Response) => {        
+        res.json({
+            dataCredits: true
+        });
+    }
 }

@@ -55,6 +55,7 @@ class UserRoutes {
         router.put('/credits/:id', this.segCreditController.updateCredit);
         router.get('/credits/:id', this.segCreditController.getOneCredit);
         router.get('/credits/client/:cliId', this.segCreditController.getCreditByClient);
+        router.get('/test', this.segCreditController.test);
     }
 }
 UserRoutes.userController = new usuarios_controller_1.default();

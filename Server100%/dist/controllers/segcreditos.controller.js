@@ -126,6 +126,11 @@ class SegCreditController {
                 dataCredits: credits
             });
         });
+        this.test = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            res.json({
+                dataCredits: true
+            });
+        });
     }
 }
 exports.default = SegCreditController;
