@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { addCantPro, Product } from 'src/app/interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../../services/data.service';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-update-product',
@@ -23,7 +23,8 @@ export class UpdateProductPage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.searchProduct();
@@ -41,15 +42,24 @@ export class UpdateProductPage implements OnInit {
     })
   }
 
-  upProduct() {
-    this.prod.cantDisp = this.sumaProduct(this.prod.cantDisp, this.upStockProduct.cantAdd);
-    this.dataService.updateProduct(this.prod.idpro, {
-      nomProd: this.prod.nomProd,
-      cantDisp: this.prod.cantDisp,
-      precio: this.prod.precio
-    }).subscribe( res => {
-      this.navCtrl.navigateRoot('/products', {animated: true});
-    })
+  async upProduct() {
+    if (this.upStockProduct.cantAdd <= 0 || this.prod.precio <= 0) {
+      const alert = await this.alertController.create({
+        header: 'Mensaje de Alerta',
+        subHeader: 'Solo se aceptan valores numericos mayores 0 para la actualización del producto',
+        buttons: ['Aceptar']
+      });
+      await alert.present();
+    } else {
+      this.prod.cantDisp = this.sumaProduct(this.prod.cantDisp, this.upStockProduct.cantAdd);
+      this.dataService.updateProduct(this.prod.idpro, {
+        nomProd: this.prod.nomProd,
+        cantDisp: this.prod.cantDisp,
+        precio: this.prod.precio
+      }).subscribe( res => {
+        this.navCtrl.navigateRoot('/products', {animated: true});
+      })
+    }
   }
 
   sumaProduct(dis, add){

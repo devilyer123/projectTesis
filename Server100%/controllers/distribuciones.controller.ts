@@ -21,7 +21,7 @@ export default class DistributionController {
             const distributions = await Distribucion.findAll({
                 attributes: [ 'iddis', 'cliId', 'nomPro', 'cantSolic', 'montoTotal', 'estadoPedido' ],
                 order: [
-                    ['iddis', 'ASC' /*'DESC'*/]
+                    ['estadoPedido', 'ASC' /*'DESC'*/]
                 ]
             });
             res.json({distributions});
@@ -79,7 +79,10 @@ export default class DistributionController {
         const { cliId } = req.params;
         const distributions = await Distribucion.findAll({
             attributes: [ 'iddis', 'cliId', 'nomPro', 'cantSolic', 'montoTotal', 'estadoPedido' ],
-            where: { cliId }
+            where: { cliId },
+            order: [
+                ['estadoPedido', 'DESC']
+            ]
         });
         res.json({
             dataDistributions: distributions

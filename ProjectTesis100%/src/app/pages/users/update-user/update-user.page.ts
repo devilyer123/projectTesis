@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { upUser, User } from 'src/app/interfaces/interfaces';
+import { rolUser, upUser, User } from 'src/app/interfaces/interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { AlertController, NavController } from '@ionic/angular';
 
@@ -23,6 +23,11 @@ export class UpdateUserPage implements OnInit {
     //password: ''
   }
 
+  rol: rolUser = {
+    username: '',
+    rolUser: ''
+  }
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private usuarioService: UsuarioService,
@@ -36,8 +41,17 @@ export class UpdateUserPage implements OnInit {
         .subscribe(res => {
           this.user = res;
           console.log(this.user);
+          this.searchRolUser();
         });
       }
+    })
+  }
+
+  async searchRolUser() {
+    const iduser = await this.usuarioService.obtenerUserByToken();
+    this.usuarioService.getOneUser(iduser)
+    .subscribe(res => {
+      this.rol = res;
     })
   }
 
@@ -58,24 +72,32 @@ export class UpdateUserPage implements OnInit {
   }
 
   async assignRol(){
-    const alert = await this.alertController.create({
-      header: 'Seleccione el rol de usuario',
-      buttons: [
-        {
-          text: 'Administrador',
-          handler: () => {
-            this.user.rolUser = "Administrador"
+    if (this.user.rolUser == 'Administrador' && this.user.username == this.rol.username) {
+      const alert = await this.alertController.create({
+        header: 'Mensaje de Alerta',
+        subHeader: 'No se puede autoasignar de manera independiente del rol de Administrador, solicite el cambio a otro Administrador',
+        buttons: ['Aceptar']
+      });
+      await alert.present();
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Seleccione el rol de usuario',
+        buttons: [
+          {
+            text: 'Administrador',
+            handler: () => {
+              this.user.rolUser = "Administrador"
+            }
+          },
+          {
+            text: 'Distribuidor/Vendedor',
+            handler: () => {
+              this.user.rolUser = "Distribuidor/Vendedor"
+            }
           }
-        },
-        {
-          text: 'Distribuidor/Vendedor',
-          handler: () => {
-            this.user.rolUser = "Distribuidor/Vendedor"
-          }
-        }
-      ]
-    })
-    await alert.present();
+        ]
+      })
+      await alert.present();
+    }
   }
-
 }

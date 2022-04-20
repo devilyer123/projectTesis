@@ -16,7 +16,7 @@
     <ion-card-content> Monto Total: {{ord.montoTotal}} </ion-card-content>
     <ion-item>
       <ion-buttons slot="end">
-        <ion-button expand="block" (click)="delPed(ord.idped)">
+        <ion-button expand="block" (click)="searchProduct(ord.idped, ord.proId, ord.cantSolic)">
           <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
         </ion-button>
       </ion-buttons>

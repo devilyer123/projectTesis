@@ -43,9 +43,9 @@
       <ion-label> Email: {{user.email}} </ion-label>
     </ion-item>
       
-    <ion-item>
+    <ion-item *ngIf="compareRolUser()">
       <ion-button fill="outline" color="warning" slot="start" [routerLink]="['/','users','update-user', user.iduser]">Editar</ion-button>
-      <ion-button fill="outline" color="danger" (click)="delUser(user.iduser)">Eliminar</ion-button>
+      <ion-button *ngIf="compareUser(user.username)" fill="outline" color="danger" (click)="delUser(user.iduser)">Eliminar</ion-button>
     </ion-item>
 
   </ion-card>

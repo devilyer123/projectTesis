@@ -3,14 +3,15 @@ import Pedido from "../models/pedido.model";
 
 export default class OrderController {
     createOrder = async (req: Request, res: Response) => {
-        const { cantSolic, montoTotal, nomPro, cliId } = req.body;
+        const { cantSolic, montoTotal, nomPro, cliId, proId } = req.body;
         let newOrder = await Pedido.create({
             cantSolic: cantSolic,
             montoTotal: montoTotal,
             nomPro: nomPro,
-            cliId: cliId
+            cliId: cliId,
+            proId: proId
         }, {
-            fields: [ 'cantSolic', 'montoTotal', 'nomPro', 'cliId' ]
+            fields: [ 'cantSolic', 'montoTotal', 'nomPro', 'cliId', 'proId' ]
         });
         res.json({message: 'Nuevo pedido registrado'});
     }
@@ -18,7 +19,7 @@ export default class OrderController {
     getOrders = async (req: Request, res: Response) => {
         try {
             const orders = await Pedido.findAll({
-                attributes: [ 'idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal' ],
+                attributes: [ 'idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal' ],
                 order: [
                     ['idped', 'ASC' /*'DESC'*/]
                 ]
@@ -33,7 +34,7 @@ export default class OrderController {
         const { id } = req.params;        
         const order = await Pedido.findOne({
             where: { idped: id },
-            attributes: [ 'idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal' ]
+            attributes: [ 'idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal' ]
         });
         res.json(order);
     }
@@ -53,7 +54,7 @@ export default class OrderController {
         const { cliId, nomPro, cantSolic, montoTotal } = req.body;
 
         const order =  await Pedido.findOne({
-            attributes: [ 'cantSolic', 'montoTotal',  'cliId', 'nomPro', 'idped' ],
+            attributes: [ 'cantSolic', 'montoTotal',  'cliId', 'proId','nomPro', 'idped' ],
             where: { idped: id }
         });
         
@@ -76,7 +77,7 @@ export default class OrderController {
     getOrderByClient = async (req: Request, res: Response) => {
         const { cliId } = req.params;
         const orders = await Pedido.findAll({
-            attributes: [ 'idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal' ],
+            attributes: [ 'idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal' ],
             where: { cliId }
         });
         res.json({

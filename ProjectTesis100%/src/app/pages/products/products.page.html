@@ -24,9 +24,9 @@
     </ion-card-header>
     <ion-card-content> Precio Unitario: {{ prod.precio }} Bs. </ion-card-content>
 
-    <ion-item>
+    <ion-item *ngIf="compareRolUser()">
       <ion-button fill="outline" color="warning" slot="start" [routerLink]="['/','products','update-product', prod.idpro]" >Actualizar Producto</ion-button>
-      <ion-button fill="outline" color="danger" (click)="delProd(prod.idpro)">Eliminar</ion-button>
+      <ion-button fill="outline" color="danger" (click)="delProd(prod.idpro, prod.cantDisp)">Eliminar</ion-button>
     </ion-item>
 
   </ion-card>

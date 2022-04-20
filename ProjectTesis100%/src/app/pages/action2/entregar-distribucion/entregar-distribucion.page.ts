@@ -34,6 +34,7 @@ export class EntregarDistribucionPage implements OnInit {
     cantVend: 0,
     tipoPago: '',
     montoCred: 0,
+    montoCredPend: 0,
     estadoCred: ''
   }
 
@@ -83,10 +84,15 @@ export class EntregarDistribucionPage implements OnInit {
       cantSolic: this.dist.cantSolic,
       montoTotal: this.dist.montoTotal,
       estadoPedido: this.dist.estadoPedido
-    }).subscribe(res => {
-      this.regSegCredit();
-      this.navCtrl.navigateRoot('/action2', {animated: true} )
-    })
+    }).subscribe(
+      (res) => {
+        
+        this.navCtrl.navigateRoot('/action2', {animated: true});
+        console.log(res);
+      },
+      (err) => console.log(err)
+    )
+    this.regSegCredit();
   }
 
   traspas(any) {
@@ -100,20 +106,25 @@ export class EntregarDistribucionPage implements OnInit {
       cantVend: this.dist.cantSolic,
       tipoPago: this.upTypPage.typPage,
       montoCred: this.dist.montoTotal,
+      montoCredPend: this.dist.montoTotal,
       estadoCred: 'Pendiente'
-    }).subscribe(resp => {
+    }).subscribe(
+      (res) => {
+        console.log(res)
+      },
+      (err) => console.log(err)
+    )
+      /*resp => {
       console.log(resp)
-      /*if(resp['ok']){
+      if(resp['ok']){
         console.log(resp);
       } else {
         this.traspas(resp);
         console.log(this.cred);
         //this.moreCredit();
         this.upCredit();
-      }*/
-    },
-    (err) => console.log(err)
-    )
+      }*
+    },*/    
   }
 
   /*upCredit() {

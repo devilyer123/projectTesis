@@ -84,4 +84,13 @@ export default class ClientController {
         });
     }
 
+    getClientByUserForReport = async (req: Request, res: Response) => {
+        const { userId } = req.params;
+        const clients = await Cliente.findAll({
+            attributes: ['idcli', 'userId', 'nomPriCli', 'apePatCli', 'apeMatCli' ],
+            where: { userId }
+        });
+        res.json(clients);
+    }
+
 }

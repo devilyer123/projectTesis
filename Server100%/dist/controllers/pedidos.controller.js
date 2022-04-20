@@ -16,21 +16,22 @@ const pedido_model_1 = __importDefault(require("../models/pedido.model"));
 class OrderController {
     constructor() {
         this.createOrder = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { cantSolic, montoTotal, nomPro, cliId } = req.body;
+            const { cantSolic, montoTotal, nomPro, cliId, proId } = req.body;
             let newOrder = yield pedido_model_1.default.create({
                 cantSolic: cantSolic,
                 montoTotal: montoTotal,
                 nomPro: nomPro,
-                cliId: cliId
+                cliId: cliId,
+                proId: proId
             }, {
-                fields: ['cantSolic', 'montoTotal', 'nomPro', 'cliId']
+                fields: ['cantSolic', 'montoTotal', 'nomPro', 'cliId', 'proId']
             });
             res.json({ message: 'Nuevo pedido registrado' });
         });
         this.getOrders = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const orders = yield pedido_model_1.default.findAll({
-                    attributes: ['idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal'],
+                    attributes: ['idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal'],
                     order: [
                         ['idped', 'ASC' /*'DESC'*/]
                     ]
@@ -45,7 +46,7 @@ class OrderController {
             const { id } = req.params;
             const order = yield pedido_model_1.default.findOne({
                 where: { idped: id },
-                attributes: ['idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal']
+                attributes: ['idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal']
             });
             res.json(order);
         });
@@ -62,7 +63,7 @@ class OrderController {
             const { id } = req.params;
             const { cliId, nomPro, cantSolic, montoTotal } = req.body;
             const order = yield pedido_model_1.default.findOne({
-                attributes: ['cantSolic', 'montoTotal', 'cliId', 'nomPro', 'idped'],
+                attributes: ['cantSolic', 'montoTotal', 'cliId', 'proId', 'nomPro', 'idped'],
                 where: { idped: id }
             });
             const updatedOrder = yield pedido_model_1.default.update({
@@ -81,7 +82,7 @@ class OrderController {
         this.getOrderByClient = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { cliId } = req.params;
             const orders = yield pedido_model_1.default.findAll({
-                attributes: ['idped', 'cliId', 'nomPro', 'cantSolic', 'montoTotal'],
+                attributes: ['idped', 'cliId', 'proId', 'nomPro', 'cantSolic', 'montoTotal'],
                 where: { cliId }
             });
             res.json({

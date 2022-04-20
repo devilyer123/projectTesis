@@ -24,6 +24,9 @@ const SegCredito = sequelize_2.default.define('segCreditos', {
     montoCred: {
         type: sequelize_1.default.INTEGER
     },
+    montoCredPend: {
+        type: sequelize_1.default.INTEGER
+    },
     estadoCred: {
         type: sequelize_1.default.STRING
     },

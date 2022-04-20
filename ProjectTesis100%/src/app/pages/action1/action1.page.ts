@@ -76,7 +76,7 @@ export class Action1Page implements OnInit {
   async delCli(id) {
     const alert = await this.alertController.create({
       header: 'Mensaje de Alerta',
-      subHeader: 'Esta por eliminar este producto',
+      subHeader: 'Esta por eliminar este Cliente',
       message: 'Desea eliminarlo?',
       buttons: [
         {
@@ -93,7 +93,6 @@ export class Action1Page implements OnInit {
           }
         },'Cancelar']
     });
-
     await alert.present();
   }
 

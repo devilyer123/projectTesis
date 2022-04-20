@@ -72,6 +72,11 @@ export interface upUser {
     email: string
 }
 
+export interface rolUser {
+    username: string,
+    rolUser: string
+}
+
 export interface Client {
     idcli?: number,
     userId?: number,
@@ -85,6 +90,7 @@ export interface Client {
 export interface Order {
     idped?: number,
     cliId?: number,
+    proId?: number,
     nomPro: string,
     cantSolic: number,
     montoTotal: number
@@ -106,6 +112,7 @@ export interface Credit {
     cantVend: number,
     tipoPago: string,
     montoCred: number,
+    montoCredPend: number,
     estadoCred: string
 }
 

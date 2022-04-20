@@ -34,18 +34,18 @@
 
       <ion-item>
         <ion-label>Cantidad Pedida: </ion-label>
-        <ion-input placeholder="0" [(ngModel)]="regisOrder.cantSolic" required></ion-input>
+        <ion-input placeholder="0" type="number" [(ngModel)]="regisOrder.cantSolic" required></ion-input>
       </ion-item>
 
       <ion-item *ngFor="let inf of infProd">
         <ion-label>
           <h2> {{inf.nomProd}} </h2>
-          <h3> Precio por Unidad: {{inf.precio}} </h3>
           <h3> Cantidad disponible: {{inf.cantDisp}} </h3>
+          <h3> Precio por Unidad: {{inf.precio}} Bs.</h3>          
         </ion-label>
 
         <ion-buttons slot="end">
-          <ion-button (click)="searProduct(inf.idpro)" expand="block">
+          <ion-button (click)="searchProduct(inf.idpro, inf.nomProd, inf.precio)" expand="block">
               <ion-icon slot="icon-only" name="enter-outline" color="success"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -78,7 +78,7 @@
       </ion-item>-->
 
       <ion-button (click)="regOrder()" expand="block" fill="clear" shape="round">
-        Agregar a la lista de Pedidos
+        Agregar a la Lista de Pedidos
       </ion-button>
 
       <!--<ion-item-divider>

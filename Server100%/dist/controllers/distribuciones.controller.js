@@ -33,7 +33,7 @@ class DistributionController {
                 const distributions = yield distribucion_1.default.findAll({
                     attributes: ['iddis', 'cliId', 'nomPro', 'cantSolic', 'montoTotal', 'estadoPedido'],
                     order: [
-                        ['iddis', 'ASC' /*'DESC'*/]
+                        ['estadoPedido', 'ASC' /*'DESC'*/]
                     ]
                 });
                 res.json({ distributions });
@@ -84,7 +84,10 @@ class DistributionController {
             const { cliId } = req.params;
             const distributions = yield distribucion_1.default.findAll({
                 attributes: ['iddis', 'cliId', 'nomPro', 'cantSolic', 'montoTotal', 'estadoPedido'],
-                where: { cliId }
+                where: { cliId },
+                order: [
+                    ['estadoPedido', 'DESC']
+                ]
             });
             res.json({
                 dataDistributions: distributions

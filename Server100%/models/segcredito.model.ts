@@ -20,6 +20,9 @@ const SegCredito = database.define('segCreditos', {
     montoCred: {
         type: Sequelize.INTEGER
     },
+    montoCredPend: {
+        type: Sequelize.INTEGER
+    },
     estadoCred: {
         type: Sequelize.STRING
     },

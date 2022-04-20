@@ -88,6 +88,14 @@ class ClientController {
                 dataClients: clients
             });
         });
+        this.getClientByUserForReport = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { userId } = req.params;
+            const clients = yield cliente_model_1.default.findAll({
+                attributes: ['idcli', 'userId', 'nomPriCli', 'apePatCli', 'apeMatCli'],
+                where: { userId }
+            });
+            res.json(clients);
+        });
     }
 }
 exports.default = ClientController;

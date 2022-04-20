@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
-import { User } from 'src/app/interfaces/interfaces';
+import { rolUser, User } from 'src/app/interfaces/interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -12,12 +12,46 @@ export class UsersPage implements OnInit {
 
   users: User[] = [];
 
+  rol: rolUser = {
+    username: '',
+    rolUser: ''
+  }
+
   constructor(private navCtrl: NavController,
     private usuarioService: UsuarioService,
     private alertController: AlertController) { }
 
   ngOnInit() {
+    this.searchRolUser();
     this.loadUsers();
+  }
+
+  async searchRolUser() {
+    const iduser = await this.usuarioService.obtenerUserByToken();
+    this.usuarioService.getOneUser(iduser)
+    .subscribe(res => {
+      this.rol = res;
+    })
+  }
+
+  compareRolUser() {
+    if (this.rol.rolUser == 'Administrador')
+    {
+      return true;
+    } else {
+      if (this.rol.rolUser == 'Distribuidor/Vendedor')
+      {
+        return false;
+      }
+    }
+  }
+
+  compareUser(user: string) {
+    if (user == this.rol.username) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   loadUsers(){

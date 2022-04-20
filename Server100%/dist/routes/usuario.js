@@ -33,6 +33,7 @@ class UserRoutes {
         router.put('/clients/:id', this.clientController.updateClient);
         router.get('/clients/:id', this.clientController.getOneClient);
         router.get('/clients/user/:userId', this.clientController.getClientByUser);
+        router.get('/clients/user/report/:userId', this.clientController.getClientByUserForReport);
         //apis de pedidos
         router.post('/orders/create', this.orderController.createOrder);
         router.get('/orders', this.orderController.getOrders);

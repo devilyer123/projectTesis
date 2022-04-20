@@ -9,7 +9,7 @@ const routes: Routes = [
     component: Action3Page
   },
   {
-    path: 'cobrar-credito/:idcli',
+    path: 'cobrar-credito/:idsegcre',
     loadChildren: () => import('./cobrar-credito/cobrar-credito.module').then( m => m.CobrarCreditoPageModule)
   },
   {

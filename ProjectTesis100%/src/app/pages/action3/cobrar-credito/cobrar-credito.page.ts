@@ -12,11 +12,13 @@ import { NavController, AlertController } from '@ionic/angular';
 })
 export class CobrarCreditoPage implements OnInit {
 
-  credit: Credit = {
+  cred: Credit = {
+    cliId: 0,
     nomPro: '',
     cantVend: 0,
     tipoPago: '',
     montoCred: 0,
+    montoCredPend: 0,
     estadoCred: ''
   };
 
@@ -31,7 +33,7 @@ export class CobrarCreditoPage implements OnInit {
     private alertController: AlertController) { }
 
   ngOnInit() {
-    //this.loadCreditByClient();
+    this.searchCredit();
   }
 
   /*loadCreditByClient() {
@@ -46,28 +48,64 @@ export class CobrarCreditoPage implements OnInit {
     })
   }*/
 
+  searchCredit() {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
+      console.log(paramMap.get('idsegcre'));
+      if (paramMap.get('idsegcre')) {
+        this.creditService.getOneCredit(parseInt(paramMap.get('idsegcre')))
+        .subscribe(res => {
+          this.cred = res;
+          console.log(this.cred);
+          console.log(this.cred.cliId);
+        })
+      }
+    })
+  }
+
   async upCredit() {
-    if(this.upCreditCollet.credAdd > this.credit.montoCred)
+    if(this.upCreditCollet.credAdd > this.cred.montoCredPend)
     {
       const alert = await this.alertController.create({
-        header: 'El monto a pagar es excedente a la deuda',
+        header: 'Error de Cobranza',
+        subHeader: 'El monto a pagar es excedente a la deuda pendiente',
         buttons: ['Aceptar']
       })
       await alert.present();
     } else {
-      this.credit.montoCred = this.restCredit(this.credit.montoCred, this.upCreditCollet.credAdd);
-    this.creditService.updateCredit(this.credit.idsegcre, {
-      nomPro: this.credit.nomPro,
-      cantVend: this.credit.cantVend,
-      tipoPago: this.credit.tipoPago,
-      montoCred: this.credit.montoCred,
-      estadoCred: this.credit.estadoCred
-    }).subscribe( res => {
-      this.navCtrl.navigateRoot('/action3', {animated:true} )
-    })
+      if (this.upCreditCollet.credAdd <= 0) {
+        const alert = await this.alertController.create({
+          header: 'Error de Cobranza',
+          subHeader: 'La cantidad de monto a cobrar debe ser mayor a 0',
+          buttons: ['Aceptar']
+        });
+        await alert.present();
+      } else {
+        if (this.cred.tipoPago == 'Al Contado' && this.upCreditCollet.credAdd != this.cred.montoCredPend) {
+          const alert = await this.alertController.create({
+            header: 'Error de Cobranza',
+            subHeader: 'El tipo de pago es Al Contado se debe cancelar el Monto Total de Deuda Pendiente',
+            buttons: ['Aceptar']
+          });
+          await alert.present();
+        } else {
+          this.cred.montoCredPend = this.restCredit(this.cred.montoCredPend, this.upCreditCollet.credAdd);
+          if (this.cred.montoCredPend == 0) {
+            this.cred.estadoCred = 'Cancelado';
+          }
+          this.creditService.updateCredit(this.cred.idsegcre, {
+            nomPro: this.cred.nomPro,
+            cantVend: this.cred.cantVend,
+            tipoPago: this.cred.tipoPago,
+            montoCred: this.cred.montoCred,
+            montoCredPend: this.cred.montoCredPend,
+            estadoCred: this.cred.estadoCred
+          }).subscribe( res => {
+            this.navCtrl.navigateRoot(`/action3/credits-client/${this.cred.cliId}`, {animated:true} )
+          })
+        }        
+      }
     }
   }
-
 
   restCredit(monT, cobC) {
     const resta = parseInt(monT) - parseInt(cobC);

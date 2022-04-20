@@ -8,6 +8,15 @@
     </ion-buttons>
 
     <ion-title>Registro de Creditos</ion-title>
+
+    <!--<ion-buttons slot="end">
+      <ion-button (click)="generatePDF()">
+        <ion-icon color="secondary" slot="icon-only" name="document-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="downloadPdf()"  [disabled]="!pdfObj">
+        <ion-icon color="secondary" slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>-->
   </ion-toolbar>
 </ion-header>
 
@@ -29,7 +38,7 @@
         </ion-label>
         <ion-buttons slot="end">
           <ion-button expand="block" [routerLink]="['/','action3','credits-client', cli.idcli]" >
-            <ion-icon slot="icon-only" name="wallet-outline" color="success"></ion-icon>
+            <ion-icon slot="icon-only" name="wallet-outline" color="warning"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>

@@ -14,6 +14,12 @@ export class OrdersClientPage implements OnInit {
   
   order: Order[] = [];
 
+  prod: Product = {
+    nomProd: '',
+    cantDisp: 0,
+    precio: 0
+  }
+
   constructor(private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private orderService: OrderService,
@@ -35,16 +41,17 @@ export class OrdersClientPage implements OnInit {
     })
   }
 
-  async delPed(id) {
+  async delPed(id, proId, cantCan) {
     const alert = await this.alertController.create({
       header: 'Mensaje de Alerta',
-      subHeader: 'Esta por eliminar este producto',
+      subHeader: 'Esta por eliminar este pedido',
       message: 'Desea eliminarlo?',
       buttons: [
         {
           text: 'Eliminar',
           handler: () => {
             console.log(id);
+            this.upProduct(proId, cantCan);
             this.orderService.getDelete(id).subscribe(
               (res) => {
                 this.loadOrderByCliente();
@@ -57,6 +64,30 @@ export class OrdersClientPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  upProduct(proId, cantCan) {
+    this.dataService.updateProduct(proId, {
+      nomProd: this.prod.nomProd,
+      cantDisp: this.sumaProduct(this.prod.cantDisp, cantCan),
+      precio: this.prod.precio
+    }).subscribe(res => {
+      console.log(res);
+    })
+  }
+
+  searchProduct(id, proId, cantCan) {
+    this.dataService.getOneProduct(proId)
+    .subscribe(res => {
+      this.prod = res;
+      console.log(this.prod);
+      this.delPed(id, proId, cantCan);
+    })
+  }
+
+  sumaProduct(dis, add){
+    const suma =  parseInt(dis) + parseInt(add);
+    return suma;
   }
 
 }

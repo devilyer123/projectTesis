@@ -16,6 +16,10 @@ export class ClientService {
     return this.http.get<RespuestaClients>(`${ URL }/clients/user/${ id }`);
   }
 
+  getClientByUserForReport(id: number) {
+    return this.http.get<Client>(`${ URL }/clients/user/report/${ id }`);
+  }
+
   getClients() {
     return this.http.get<RespuestaClients>(`${ URL }/clients`);
   }

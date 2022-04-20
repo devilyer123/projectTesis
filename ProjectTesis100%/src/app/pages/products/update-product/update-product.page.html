@@ -21,15 +21,15 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Cantidad Disponible de Productos</ion-label>
-        <ion-input name="cantDisp" type="text" [(ngModel)]="prod.cantDisp" disabled required></ion-input>
+        <ion-input name="cantDisp" type="number" [(ngModel)]="prod.cantDisp" disabled required></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Cantidad a Aumentar al Stock actual del Producto</ion-label>
-        <ion-input name="cantAdd" type="text" [(ngModel)]="upStockProduct.cantAdd" required></ion-input>
+        <ion-input name="cantAdd" type="number" [(ngModel)]="upStockProduct.cantAdd" required></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Precio de Venta</ion-label>
-        <ion-input name="precio" type="text" [(ngModel)]="prod.precio" required></ion-input>
+        <ion-input name="precio" type="number" [(ngModel)]="prod.precio" required></ion-input>
       </ion-item>
 
     </ion-list>

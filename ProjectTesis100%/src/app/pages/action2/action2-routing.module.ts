@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'entregar-distribucion/:idcli',
     loadChildren: () => import('./entregar-distribucion/entregar-distribucion.module').then( m => m.EntregarDistribucionPageModule)
+  },
+  {
+    path: 'update-distribution/:iddis',
+    loadChildren: () => import('./update-distribution/update-distribution.module').then( m => m.UpdateDistributionPageModule)
   }
 ];
 
