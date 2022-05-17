@@ -5,6 +5,13 @@
     </ion-buttons>
     <ion-title>Actualizar Informacion del Pedido</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar" 
+    [animated]="true"
+    (ionChange)="onSearchChange( $event )"
+    [debounce]="250"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -37,14 +44,14 @@
         <ion-input placeholder="0" type="number" [(ngModel)]="regisOrder.cantSolic" required></ion-input>
       </ion-item>
 
-      <ion-item *ngFor="let inf of infProd">
+      <ion-item *ngFor="let inf of infProd | filtro:textoBuscar:'nomProd'">
         <ion-label>
           <h2> {{inf.nomProd}} </h2>
           <h3> Cantidad disponible: {{inf.cantDisp}} </h3>
           <h3> Precio por Unidad: {{inf.precio}} Bs.</h3>          
         </ion-label>
 
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" *ngIf="inf.cantDisp != 0">
           <ion-button (click)="searchProduct(inf.idpro, inf.nomProd, inf.precio)" expand="block">
               <ion-icon slot="icon-only" name="enter-outline" color="success"></ion-icon>
           </ion-button>

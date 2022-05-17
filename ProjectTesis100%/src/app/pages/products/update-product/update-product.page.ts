@@ -43,7 +43,7 @@ export class UpdateProductPage implements OnInit {
   }
 
   async upProduct() {
-    if (this.upStockProduct.cantAdd <= 0 || this.prod.precio <= 0) {
+    if (this.upStockProduct.cantAdd < 0 || this.prod.precio <= 0) {
       const alert = await this.alertController.create({
         header: 'Mensaje de Alerta',
         subHeader: 'Solo se aceptan valores numericos mayores 0 para la actualización del producto',

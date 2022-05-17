@@ -90,6 +90,12 @@ export class UpdateUserPage implements OnInit {
             }
           },
           {
+            text: 'Gerente',
+            handler: () => {
+              this.user.rolUser = "Gerente"
+            }
+          },
+          {
             text: 'Distribuidor/Vendedor',
             handler: () => {
               this.user.rolUser = "Distribuidor/Vendedor"

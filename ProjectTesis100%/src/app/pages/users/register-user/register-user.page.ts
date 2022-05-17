@@ -59,6 +59,12 @@ export class RegisterUserPage implements OnInit {
           }
         },
         {
+          text: 'Gerente',
+          handler: () => {
+            this.registerUser.rolUser = "Gerente"
+          }
+        },
+        {
           text: 'Distribuidor/Vendedor',
           handler: () => {
             this.registerUser.rolUser = "Distribuidor/Vendedor"

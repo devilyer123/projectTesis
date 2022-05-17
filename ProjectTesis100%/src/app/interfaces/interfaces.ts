@@ -43,6 +43,10 @@ export interface selecTypPage {
     typPage: string
 }
 
+export interface selectTypPdf {
+    typPdf: string
+}
+
 export interface collectCredit {
     credAdd: number
 }
@@ -56,7 +60,7 @@ export interface User {
     nrocelular: number,
     rolUser: string,
     username: string,
-    email: string,
+    email?: string,
     password: string
 }
 
@@ -69,7 +73,7 @@ export interface upUser {
     nrocelular: number,
     rolUser: string,
     username: string,
-    email: string
+    email?: string
 }
 
 export interface rolUser {
@@ -87,13 +91,27 @@ export interface Client {
     updatedAt?: Date*/
 }
 
+export interface listVis {
+    idcli?: number,
+    nomPriCli: string,
+    apePatCli: string,
+    apeMatCli: string,
+    totalLista: number
+}
+
+export interface listProdGrap {
+    nomPro: string,
+    cantVend: number
+}
+
 export interface Order {
     idped?: number,
     cliId?: number,
     proId?: number,
     nomPro: string,
     cantSolic: number,
-    montoTotal: number
+    montoTotal: number,
+    createdAt?: Date
 }
 
 export interface Distribution {
@@ -102,7 +120,9 @@ export interface Distribution {
     nomPro: string,
     cantSolic: number,
     montoTotal: number,
-    estadoPedido: string
+    estadoPedido: string,
+    createdAt?: Date,
+    updatedAt?: Date
 }
 
 export interface Credit {
@@ -113,7 +133,8 @@ export interface Credit {
     tipoPago: string,
     montoCred: number,
     montoCredPend: number,
-    estadoCred: string
+    estadoCred: string,
+    updatedAt?: Date
 }
 
 /*export interface ListCredit {

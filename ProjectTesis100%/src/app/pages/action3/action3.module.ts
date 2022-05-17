@@ -8,6 +8,7 @@ import { Action3PageRoutingModule } from './action3-routing.module';
 
 import { Action3Page } from './action3.page';
 import { ComponentsModule } from '../../components/components.module';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ComponentsModule } from '../../components/components.module';
     IonicModule,
     Action3PageRoutingModule,
     ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
   declarations: [Action3Page]
 })

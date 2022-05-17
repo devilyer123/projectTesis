@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EntregarDistribucionPageRoutingModule } from './entregar-distribucion-routing.module';
 
 import { EntregarDistribucionPage } from './entregar-distribucion.page';
+import { PipesModule } from '../../../pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EntregarDistribucionPageRoutingModule
+    EntregarDistribucionPageRoutingModule,
+    PipesModule
   ],
   declarations: [EntregarDistribucionPage]
 })

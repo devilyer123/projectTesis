@@ -9,6 +9,13 @@
 
     <ion-title>Registro de Distribucion</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar" 
+    [animated]="true"
+    (ionChange)="onSearchChange( $event )"
+    [debounce]="250"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -19,16 +26,16 @@
     </ion-card-header>
   </ion-card>
 
-  <ion-card *ngFor="let cli of clients">
+  <ion-card *ngFor="let list of listDist | filtro:textoBuscar:'nomPriCli'">
     <ion-list>
       <ion-item>
         <ion-label>
-          <h2> {{ cli.nomPriCli }} {{ cli.apePatCli }} </h2>
-          <h3> Cantidad de Productos </h3>
-          <p> Productos totales a Entregar </p>
+          <h2> {{ list.nomPriCli }} {{ list.apePatCli }} </h2>
+          <h3> Cantidad Total de Distribuciones: {{ list.totalLista }} </h3>
+          <p> Productos a Distribuir </p>
         </ion-label>
         <ion-buttons slot="end">
-          <ion-button expand="block" [routerLink]="['/','action2','entregar-distribucion', cli.idcli]" >
+          <ion-button expand="block" [routerLink]="['/','action2','entregar-distribucion', list.idcli]" >
             <ion-icon slot="icon-only" name="bicycle-outline" color="success"></ion-icon>
           </ion-button>
         </ion-buttons>

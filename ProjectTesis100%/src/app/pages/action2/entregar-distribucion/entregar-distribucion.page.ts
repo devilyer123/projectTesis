@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Client, Credit, Distribution, selecTypPage } from '../../../interfaces/interfaces';
+import { Client, Credit, Distribution, selectTypPdf, selecTypPage } from '../../../interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
 import { DistributionService } from 'src/app/services/distribution.service';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { CreditService } from 'src/app/services/credit.service';
 import { ClientService } from 'src/app/services/client.service';
+
+import pdfMake from "pdfmake/build/pdfMake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { HttpClient } from '@angular/common/http';
+import { Filesystem, FilesystemDirectory } from '@capacitor/core';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-entregar-distribucion',
@@ -14,6 +21,8 @@ import { ClientService } from 'src/app/services/client.service';
 export class EntregarDistribucionPage implements OnInit {
 
   distribution: Distribution[] = [];
+
+  textoBuscar: string = '';
 
   cli: Client = {
     nomPriCli: '',
@@ -42,17 +51,34 @@ export class EntregarDistribucionPage implements OnInit {
     typPage: ''
   }
 
+  seTypPdf: selectTypPdf = {
+    typPdf: ''
+  }
+
+  pdfObj: any;
+  logoData = null;
+  showlogo = true;
+
   constructor(private activatedRoute: ActivatedRoute,
     private distributionService: DistributionService,
     private alertController: AlertController,
     private creditService: CreditService,
     private clientService: ClientService,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private http: HttpClient,
+    private plt: Platform,
+    private fileOpener: FileOpener) { }
 
   ngOnInit() {
     this.searchClient();
     this.loadDistributionByClient();
+    this.loadLocalAssetToBase64();
   }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
+  }
+
 
   loadDistributionByClient() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
@@ -113,30 +139,8 @@ export class EntregarDistribucionPage implements OnInit {
         console.log(res)
       },
       (err) => console.log(err)
-    )
-      /*resp => {
-      console.log(resp)
-      if(resp['ok']){
-        console.log(resp);
-      } else {
-        this.traspas(resp);
-        console.log(this.cred);
-        //this.moreCredit();
-        this.upCredit();
-      }*
-    },*/    
+    )  
   }
-
-  /*upCredit() {
-    this.cred.montoCred = this.sumarMonto(this.cred.montoCred, this.dist.montoTotal);
-    this.creditService.updateCredit(this.cred.idsegcre, {
-      tipoPago: this.cred.tipoPago,
-      montoCred: this.cred.montoCred,
-      estadoCred: 'Pendiente'
-    }).subscribe( res => {
-      console.log(res);
-    })
-  }*/
 
   sumarMonto(ant, act){
     const total = parseInt(ant) + parseInt(act);
@@ -205,6 +209,183 @@ export class EntregarDistribucionPage implements OnInit {
     } else {
       return false;
     }
+  }
+
+  loadLocalAssetToBase64() {
+    this.http.get('./assets/img/logo.jpg', { responseType: 'blob' })
+    .subscribe(res => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.logoData = reader.result;
+      }
+      reader.readAsDataURL(res);
+    })
+  }
+
+  async selectPdf() {
+    const alert = await this.alertController.create({
+      header: 'Seleccione el tipo de PDF que desea generar',
+      buttons: [
+        {
+          text: 'Pendiente',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Pendiente';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        },
+        {
+          text: 'Entregado',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Entregado';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        },
+        {
+          text: 'Ambos',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Ambos';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        }
+      ]
+    })
+    await alert.present();
+  }
+
+  createPdf(tyPdf) {
+    let logo = {};
+    if (this.showlogo) {
+      logo = { image: this.logoData, width: 75 };
+    }
+    var body2 = [];
+    if (tyPdf == 'Pendiente') {
+      body2.push(['Nombre del Producto',
+      'Cantidad Solicitada',
+      'Monto Total del Pedido',
+      'Fecha del Pedido',
+      'Estado del Pedido'])
+      for(let i=0; i< this.distribution.length; i++) {
+        if (tyPdf == this.distribution[i].estadoPedido) {
+          body2.push([this.distribution[i].nomPro, 
+            this.distribution[i].cantSolic, 
+            this.distribution[i].montoTotal, 
+            this.distribution[i].createdAt,
+            this.distribution[i].estadoPedido]);
+        }        
+      }
+    } else {
+      if (tyPdf == 'Entregado') {
+        body2.push(['Nombre del Producto',
+        'Cantidad Solicitada',
+        'Monto Total del Pedido',
+        'Fecha de Entrega',
+        'Estado del Pedido'])
+        for(let i=0; i< this.distribution.length; i++) {
+          if (tyPdf == this.distribution[i].estadoPedido) {
+            body2.push([this.distribution[i].nomPro, 
+              this.distribution[i].cantSolic, 
+              this.distribution[i].montoTotal, 
+              this.distribution[i].createdAt,
+              this.distribution[i].estadoPedido]);
+          }        
+        }
+      } else {
+        if (tyPdf == 'Ambos') {
+          body2.push(['Nombre del Producto',
+          'Cantidad Solicitada',
+          'Monto Total del Pedido',
+          'Fecha del Pedido/Entrega',
+          'Estado del Pedido'])
+          for(let i=0; i< this.distribution.length; i++) {
+            body2.push([this.distribution[i].nomPro, 
+              this.distribution[i].cantSolic, 
+              this.distribution[i].montoTotal, 
+              this.distribution[i].createdAt,
+              this.distribution[i].estadoPedido]);     
+          }          
+        }
+      }
+    }    
+    console.log(body2);
+    const docDefinition = {
+      watermark: { text: 'Importadora Rocha', color: 'blue', opacity: 0.2, bold: true/*, italics: false*/ },
+      content: [
+        {
+          columns: [
+            logo,
+            {
+              text: new Date().toTimeString(),
+              alignment: 'right'
+            }
+          ]
+        },
+        { text: 'SEGUIMIENTO DE DISTRIBUCIONES', style: 'header', alignment: 'center' },
+        { text: 'Lista de Seguimiento de Distribuciones del Cliente', style: 'subheader', alignment: 'center' },
+        'Listado actual de todos los distribuciones del cliente: '+ this.cli.nomPriCli+' '+this.cli.apePatCli+' '+this.cli.apeMatCli,
+        {
+          style: 'tableExample',
+          table: {
+            widths: ['auto', 'auto', 'auto', 'auto', 'auto'],
+            headerRows: 1,
+            body: body2,
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10]
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 10, 0, 5]
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 13,
+          color: 'black'
+        }
+      }
+    }
+    this.pdfObj = pdfMake.createPdf(docDefinition);
+    this.alertGenPDF();
+    console.log(this.pdfObj);
+  }
+
+  downloadPdf() {
+    if (this.plt.is('cordova')) {
+      this.pdfObj.getBase64(async (data) => {
+        try {
+          let path = `pdf/myletter_${Date.now}.pdf`;
+          const result = await Filesystem.writeFile({
+            path,
+            data,
+            directory: FilesystemDirectory.Documents,
+            recursive: true
+          });
+          this.fileOpener.open(`${result.uri}`, 'application/pdf');
+        } catch (e) {
+          console.error('Unable to write file', e);
+        }
+      });
+    } else {
+      this.pdfObj.download();
+    }
+  }
+
+  async alertGenPDF() {
+    const alert = await this.alertController.create({
+      header: 'Se genero el reporte de manera satisfactoria',
+      subHeader: 'Esta disponible para la descarga',
+      buttons: ['Aceptar']
+    });
+
+    await alert.present();
   }
 
 }

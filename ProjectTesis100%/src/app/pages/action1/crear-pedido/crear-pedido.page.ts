@@ -86,6 +86,8 @@ export class CrearPedidoPage implements OnInit {
     precio: 0
   }
 
+  textoBuscar: string = '';
+
   regisOrder: Order = {
     cliId: 0,
     proId: 0,
@@ -117,6 +119,10 @@ export class CrearPedidoPage implements OnInit {
   ngOnInit() {
     this.searchClient();
     this.loadInfProd();
+  }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   searchClient() {

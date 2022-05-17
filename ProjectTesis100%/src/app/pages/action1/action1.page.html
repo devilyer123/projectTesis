@@ -7,6 +7,13 @@
 
     <ion-title>Registro de Ventas</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar" 
+    [animated]="true"
+    (ionChange)="onSearchChange( $event )"
+    [debounce]="250"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
@@ -17,16 +24,17 @@
     </ion-card-header>
   </ion-card>
 
-  <ion-card *ngFor="let cli of clients">
+  <ion-card *ngFor="let list of listPed | filtro:textoBuscar:'nomPriCli'">
     <ion-list>
       <ion-item>
         <ion-label>
-          <h2> {{ cli.nomPriCli }} {{ cli.apePatCli }} </h2>
-          <h3> Cantidad de Productos </h3>
-          <p> Productos totales a Entregar </p>
+          <h2> {{ list.nomPriCli }} {{ list.apePatCli }} {{ list.apeMatCli }} </h2>
+          <h3> Cantidad Total de Pedidos: {{ list.totalLista }} </h3>
+          <!--<h3> Cantidad de Productos </h3>-->
+          <p> Productos Vendidos </p>
         </ion-label>
         <ion-buttons slot="end">
-          <ion-button expand="block" [routerLink]="['/','action1','orders-client', cli.idcli]" >
+          <ion-button expand="block" [routerLink]="['/','action1','orders-client', list.idcli]" >
             <ion-icon slot="icon-only" name="alert-circle-outline" color="success"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -35,10 +43,10 @@
 
     <ion-item>
       <ion-buttons slot="end">
-        <ion-button expand="block" [routerLink]="['/','action1','crear-pedido', cli.idcli]" >
+        <ion-button expand="block" [routerLink]="['/','action1','crear-pedido', list.idcli]" >
           <ion-icon slot="icon-only" name="pencil-outline" color="warning" ></ion-icon>
         </ion-button>
-        <ion-button expand="block" (click)="delCli(cli.idcli)">
+        <ion-button expand="block" (click)="delCli(list.idcli)">
           <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
         </ion-button>
       </ion-buttons>

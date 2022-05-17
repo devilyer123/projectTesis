@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from 'src/app/interfaces/interfaces';
+import { Client, Credit, listVis, Order } from 'src/app/interfaces/interfaces';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 import { ClientService } from 'src/app/services/client.service';
@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { Platform, AlertController } from '@ionic/angular';
+import { CreditService } from 'src/app/services/credit.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 interface compCred {
@@ -27,6 +28,14 @@ interface compCred {
 export class Action3Page implements OnInit {
 
   clients: Client[] = [];
+
+  ord: Credit[] = [];
+
+  listCred: listVis[] = [];
+
+  vacio: Credit[] = [];
+
+  textoBuscar: string = '';
 
   myForm: FormGroup
   pdfObj: any;
@@ -63,11 +72,16 @@ export class Action3Page implements OnInit {
     private plt: Platform,
     private http: HttpClient,
     private fileOpener: FileOpener,
-    private alertController: AlertController) { }
+    private alertController: AlertController,
+    private creditService: CreditService) { }
 
   ngOnInit() {
     this.loadClientByUser();
     this.loadLocalAssetToBase64();
+  }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   async loadClientByUser() {
@@ -75,8 +89,27 @@ export class Action3Page implements OnInit {
     this.clientService.getClientsByUser(iduser)
     .subscribe(resp => {
       this.clients.push(...resp.dataClients);
-    });
-    console.log(this.clients);
+      //console.log(this.clients);
+      this.loadListClient();
+    });    
+  }
+
+  loadListClient() {
+    for(let i = 0; i < this.clients.length; i++) {
+      this.creditService.getCreditsByClient(this.clients[i].idcli)
+      .subscribe(resp => {
+        this.ord.push(...resp.dataCredits);
+        this.listCred[i]= {
+          idcli: this.clients[i].idcli,
+          nomPriCli: this.clients[i].nomPriCli,
+          apePatCli: this.clients[i].apePatCli,
+          apeMatCli: this.clients[i].apeMatCli,
+          totalLista: this.ord.length
+        }
+        this.ord = [];
+      })      
+    }
+    //console.log(this.listPed);
   }
 
   generatePDF2(){

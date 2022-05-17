@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'update-product/:idpro',
     loadChildren: () => import('./update-product/update-product.module').then( m => m.UpdateProductPageModule)
+  },
+  {
+    path: 'graphics-products',
+    loadChildren: () => import('./graphics-products/graphics-products.module').then( m => m.GraphicsProductsPageModule)
   }
 ];
 

@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'credits-client/:idcli',
     loadChildren: () => import('./credits-client/credits-client.module').then( m => m.CreditsClientPageModule)
+  },
+  {
+    path: 'reports-client/:idcli',
+    loadChildren: () => import('./reports-client/reports-client.module').then( m => m.ReportsClientPageModule)
   }
 ];
 

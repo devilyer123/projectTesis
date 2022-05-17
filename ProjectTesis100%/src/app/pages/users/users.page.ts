@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
-import { rolUser, User } from 'src/app/interfaces/interfaces';
+import { rolUser, upUser, User } from 'src/app/interfaces/interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -12,9 +12,23 @@ export class UsersPage implements OnInit {
 
   users: User[] = [];
 
+  textoBuscar: string = '';
+
   rol: rolUser = {
     username: '',
     rolUser: ''
+  }
+
+  us: upUser = {
+    priNombre: '',
+    secNombre: '',
+    apPaterno: '',
+    apMaterno: '',
+    nrocelular: 0,
+    rolUser: '',
+    username: '',
+    email: '',
+    //password: ''
   }
 
   constructor(private navCtrl: NavController,
@@ -23,7 +37,12 @@ export class UsersPage implements OnInit {
 
   ngOnInit() {
     this.searchRolUser();
+    this.searchDataUser();
     this.loadUsers();
+  }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   async searchRolUser() {
@@ -31,6 +50,14 @@ export class UsersPage implements OnInit {
     this.usuarioService.getOneUser(iduser)
     .subscribe(res => {
       this.rol = res;
+    })
+  }
+
+  async searchDataUser() {
+    const iduser = await this.usuarioService.obtenerUserByToken();
+    this.usuarioService.getOneUser(iduser)
+    .subscribe(res => {
+      this.us = res;
     })
   }
 

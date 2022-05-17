@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, PopoverController } from '@ionic/angular';
-import { Client, User } from 'src/app/interfaces/interfaces';
+import { Client, listVis, Order, User } from 'src/app/interfaces/interfaces';
 import { ClientService } from 'src/app/services/client.service';
+import { OrderService } from 'src/app/services/order.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { PopoverInfoComponent } from '../../components/popover-info/popover-info.component';
 
@@ -20,6 +21,14 @@ interface compPed {
 export class Action1Page implements OnInit {
 
   clients: Client[] = []; 
+
+  textoBuscar: string = '';
+
+  ord: Order[] = [];
+
+  listPed: listVis[] = [];
+
+  vacio: Order[] = [];
 
   /*pedidos: compPed[] = [
     {
@@ -43,10 +52,16 @@ export class Action1Page implements OnInit {
     private router: Router,
     private usuarioService: UsuarioService,
     private clientService: ClientService,
-    private alertController: AlertController) { }
+    private alertController: AlertController,
+    private orderService: OrderService) { }
 
   ngOnInit() {
     this.loadClientByUser();
+    //this.loadListClient();
+  }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   async loadClientByUser() {
@@ -54,20 +69,29 @@ export class Action1Page implements OnInit {
     this.clientService.getClientsByUser(iduser)
     .subscribe(resp => {
       this.clients.push(...resp.dataClients);
-      console.log(resp);
-      console.log(this.clients);
+      //console.log(resp);
+      //console.log(this.clients);
+      this.loadListClient();
     });
   }
 
-  /*async presentPopover(ev: any) {
-    const popover = await this.popoverCtrl.create({
-      component: PopoverInfoComponent,
-      event: ev,
-      translucent: true
-    });
-    await popover.present();
-    //const { url } = await popover.onWillDismiss();
-  }*/
+  loadListClient() {
+    for(let i = 0; i < this.clients.length; i++) {
+      this.orderService.getOrdersByClient(this.clients[i].idcli)
+      .subscribe(resp => {
+        this.ord.push(...resp.dataOrders);
+        this.listPed[i]= {
+          idcli: this.clients[i].idcli,
+          nomPriCli: this.clients[i].nomPriCli,
+          apePatCli: this.clients[i].apePatCli,
+          apeMatCli: this.clients[i].apeMatCli,
+          totalLista: this.ord.length
+        }
+        this.ord = [];
+      })      
+    }
+    //console.log(this.listPed);
+  }
 
   crePedido(){
     this.router.navigate(['/action1/register-client']);

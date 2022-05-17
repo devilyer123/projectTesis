@@ -15,6 +15,8 @@ export class ProductsPage implements OnInit {
 
   activities: Observable<MenuCompenente[]>
 
+  textoBuscar: string = '';
+
   products: Product[] = [];
 
   prod: Product = {
@@ -38,6 +40,10 @@ export class ProductsPage implements OnInit {
   ngOnInit() {
     this.searchRolUser();
     this.loadProducts();    
+  }
+
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   async searchRolUser() {
@@ -83,6 +89,10 @@ export class ProductsPage implements OnInit {
       console.log(this.products);
       console.log(resp);
     });
+  }
+
+  graphProd(){
+    this.navCtrl.navigateRoot('/products/graphics-products')
   }
 
   regisProd(){

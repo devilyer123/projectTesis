@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Client, Credit } from 'src/app/interfaces/interfaces';
+import { Client, Credit, selectTypPdf } from 'src/app/interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
 import { CreditService } from 'src/app/services/credit.service';
 import { ClientService } from 'src/app/services/client.service';
 import { AlertController, NavController, Platform } from '@ionic/angular';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { format, parseISO } from 'date-fns';
 
 import pdfMake from "pdfmake/build/pdfMake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { HttpClient } from '@angular/common/http';
 import { Filesystem, FilesystemDirectory } from '@capacitor/core';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -20,11 +21,17 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class CreditsClientPage implements OnInit {
 
   credit: Credit[] = [];
+
+  textoBuscar: string = '';
   
   cli: Client = {
     nomPriCli: '',
     apePatCli: '',
     apeMatCli: ''
+  }
+
+  seTypPdf: selectTypPdf = {
+    typPdf: ''
   }
 
   pdfObj: any;
@@ -54,6 +61,10 @@ export class CreditsClientPage implements OnInit {
     this.loadLocalAssetToBase64();
   }
 
+  onSearchChange( event ) {
+    this.textoBuscar = event.detail.value;
+  }
+
   loadCreditByClient() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       if (paramMap.get('idcli')) {
@@ -72,7 +83,7 @@ export class CreditsClientPage implements OnInit {
         this.clientService.getOneClient(parseInt(paramMap.get('idcli')))
         .subscribe(res => {
           this.cli = res;
-          //console.log(this.cli);
+          console.log(this.cli);
         })
       }
     })
@@ -89,7 +100,37 @@ export class CreditsClientPage implements OnInit {
     })
   }
 
-  createPdf() {
+  async selectPdf() {
+    const alert = await this.alertController.create({
+      header: 'Seleccione el tipo de PDF que desea generar',
+      buttons: [
+        {
+          text: 'Pendiente',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Pendiente';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        },
+        {
+          text: 'Cancelado',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Cancelado';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        },
+        {
+          text: 'Ambos',
+          handler: () => {
+            this.seTypPdf.typPdf = 'Ambos';
+            this.createPdf(this.seTypPdf.typPdf);
+          }
+        }
+      ]
+    })
+    await alert.present();
+  }
+
+  createPdf(tyPdf) {
     let logo = {};
     if (this.showlogo) {
       logo = { image: this.logoData, width: 75 };
@@ -99,16 +140,34 @@ export class CreditsClientPage implements OnInit {
     'Cantidad Vendida',
     'Monto Total de la Venta', 
     'Tipo de Pago del Credito', 
-    'Monto de Credito Pendiente', 
-  'Estado del Credito'])
-    for(let i=0; i< this.credit.length; i++) {
-      body2.push([this.credit[i].nomPro, 
-        this.credit[i].cantVend, 
-        this.credit[i].montoCred, 
-        this.credit[i].tipoPago,
-        this.credit[i].montoCredPend, 
-    this.credit[i].estadoCred]);
-    }
+    'Monto de Credito Pendiente',
+    'Ultimo Pago Realizado',
+    'Estado del Credito'])
+    if (tyPdf == 'Pendiente' || tyPdf == 'Cancelado') {
+      for(let i=0; i< this.credit.length; i++) {
+        if (tyPdf == this.credit[i].estadoCred) {
+          body2.push([this.credit[i].nomPro, 
+            this.credit[i].cantVend, 
+            this.credit[i].montoCred, 
+            this.credit[i].tipoPago,
+            this.credit[i].montoCredPend,
+            this.credit[i].updatedAt,
+          this.credit[i].estadoCred]);
+        }
+      }
+    } else {
+      if (tyPdf == 'Ambos') {
+        for(let i=0; i< this.credit.length; i++) {
+          body2.push([this.credit[i].nomPro, 
+            this.credit[i].cantVend, 
+            this.credit[i].montoCred, 
+            this.credit[i].tipoPago,
+            this.credit[i].montoCredPend,
+            this.credit[i].updatedAt,
+          this.credit[i].estadoCred]);
+        }
+      }
+    } 
     console.log(body2);
     const docDefinition = {
       watermark: { text: 'Importadora Rocha', color: 'blue', opacity: 0.2, bold: true/*, italics: false*/ },
@@ -117,7 +176,7 @@ export class CreditsClientPage implements OnInit {
           columns: [
             logo,
             {
-              text: new Date().toTimeString(),
+              text: new Date().toTimeString()/*format(parseISO(new Date().toTimeString()), 'MMM d, yyyy')*/,
               alignment: 'right'
             }
           ]
@@ -128,7 +187,7 @@ export class CreditsClientPage implements OnInit {
         {
           style: 'tableExample',
           table: {
-            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
             headerRows: 1,
             body: body2
           }
